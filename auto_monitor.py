@@ -27,9 +27,11 @@ def resource_path(relative_path):
 # --- КОНФИГУРАЦИЯ ---
 # Этот блок остается без изменений
 LEAGUES_TO_MONITOR = {
-    "LCK": "League of Legends - LCK",
-    "LEC": "League of Legends - LEC",
-    "LTA North": "League of Legends - LTA North",
+    #"LCK": "League of Legends - LCK",
+    #"LEC": "League of Legends - LEC",
+    #"LTA North": "League of Legends - LTA North",
+    "LCP":"League of Legends - LCP",
+    "LTA South":"League of Legends - LTA South"
     # Можете добавить сюда столько турниров, сколько нужно
 }
 
@@ -95,11 +97,48 @@ TEAM_NAME_MAPPING = {
     "GIANTX":"GIANTX",
     "Dignitas":"Dignitas",
     "Cloud9":"Cloud9",
-    "Vitality":"Team Vitality"
+    "Vitality":"Team Vitality",
+    "BK ROG": "BK ROG Esports",
+    "Galions": "Galions",
+    "Ici Japon Corp": "Ici Japon Corp",
+    "Solary": "Solary",
+    "Karmine Corp Blue": "Karmine Corp Blue",
+    "Gentle Mates": "Gentle Mates",
+    "Vitality.Bee":"Vitality.Bee",
+    "ULF":"ULF ESPORTS",
+    "BBL Dark Passage":"BBL Dark Passage",
+    "Dplus KIA":"Dplus KIA",
+    "DN Freecs Challengers":"DNF Challengers",
+    "Gen.G Global Academy":"Gen.G Global Academy",
+    "T1 Academy":"T1 Esports Academy",
+    "OKSavingsBank BRION Challengers":"BRO Challengers",
+    "BNK FearX Youth":"BNK FEARX Youth",
+    "UCAM":"UCAM Esports",
+    "Movistar KOI Fenix":"Movistar KOI Fénix",
+    "LUA":"LUA Gaming",
+    "Misa":"Misa Esports",
+    "Besiktas":"Beşiktaş Esports",
+    "DetonatioN FocusMe":"DetonatioN FocusMe",
+    "Chiefs":"The Chiefs Esports Club",
+    "CTBC Flying Oyster":"CTBC Flying Oyster",
+    "TALON":"PSG Talon",
+    "paiN":"paiN Gaming",
+    "FURIA":"FURIA",
+    "Isurus Estral":"Isurus",
+    "Fluxo W7M":"Fluxo W7M",
+    "Fukuoka SoftBank HAWKS":"Fukuoka SoftBank HAWKS gaming",
+    "MGN Vikings":"MGN Vikings Esports",
+    "GAM":"GAM Esports",
+    "Secret Whales":"Team Secret Whales",
+    "Leviatan":"LEVIATÁN",
+    "Vivo Keyd Stars":"Vivo Keyd Stars",
+    "LOUD":"LOUD",
+    "RED Canids":"RED Kalunga",
+    "Hanwha Life Challengers":"HLE Challengers"
 }
 ROLES = ["Top", "Jungle", "Mid", "Bot", "Support"]
 SOURCE_SHEET_NAME = "LoL Matches sync"
-HISTORY_WORKSHEET_NAME = "Лист1"
+HISTORY_WORKSHEET_NAME = "Лист2"
 AUTO_PREDICTIONS_SHEET_NAME = "Auto Predictions"
 COLUMN_INDICES = { "Timestamp": 0, "Team1": 1, "Team2": 2, "Team1Picks": 3, "Team2Picks": 4, "PredictedWinner": 5, "WinnerProb": 6, "Team1Odds": 7, "Team2Odds": 8, "ActualResult": 9, "TimestampResult": 10, "Comment": 11, "BetAmount": 12, "AggressiveBet": 13, "BalancedBet": 14, "ReliableBet": 15, "AggressivePL": 16, "BalancedPL": 17, "ReliablePL": 18, "Month": 19, "SkipReason": 20 }
 
@@ -120,7 +159,7 @@ try:
     LOL_ESPORTS_API_KEY = os.environ.get("LOL_ESPORTS_API_KEY")
     ODDS_API_USER = os.environ.get("ODDS_API_USER")
     ODDS_API_PASS = os.environ.get("ODDS_API_PASS")
-    TELEGRAM_CHAT_ID = -1002696801254 # ID чата можно оставить, это не секретная информация
+    TELEGRAM_CHAT_ID = -1002770534718 # ID чата можно оставить, это не секретная информация
 
     # Проверка, что все переменные успешно загрузились
     if not all([TELEGRAM_TOKEN, LOL_ESPORTS_API_KEY, ODDS_API_USER, ODDS_API_PASS]):
