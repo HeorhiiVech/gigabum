@@ -406,29 +406,33 @@ def check_and_get_draft(gid):
     
     return None, None, None, None
 def main_loop():
-    print(f"\n{'='*25} ЗАПУСК НОВОГО ЦИКЛА МОНИТОРИНГА {'='*25}")
-    print(f"Время запуска: {datetime.now():%Y-%m-%d %H:%M:%S}")
+    print(f"\n{'='*25} ЗАПУСК НОВОГО ЦИКЛА МОНИТОРИНГА {'='*25}", flush=True) # Добавлено flush
+    print(f"Время запуска: {datetime.now():%Y-%m-%d %H:%M:%S}", flush=True) # Добавлено flush
 
-    # ИЗМЕНЕНИЕ: Мы возвращаем использование папки cache
     os.makedirs("cache", exist_ok=True)
 
     found_active_game_to_track_overall = False
 
     try:
+        print("Точка 1: Загружаем историю из Google Sheets...", flush=True)
         h_data = history_sheet.get_all_values()[1:]
+        print("Точка 2: История успешно загружена.", flush=True)
     except Exception as e:
-        print(f"CRITICAL: Не удалось загрузить историю матчей: {e}.")
+        print(f"CRITICAL: Не удалось загрузить историю матчей: {e}.", flush=True)
         return False
 
     for schedule_name, odds_name in LEAGUES_TO_MONITOR.items():
-        print(f"\n{'='*15} ОБРАБОТКА ТУРНИРА: {schedule_name} {'='*15}")
+        print(f"\n{'='*15} ОБРАБОТКА ТУРНИРА: {schedule_name} {'='*15}", flush=True)
 
+        print(f"Точка 3: Запрашиваем расписание для {schedule_name}...", flush=True)
         scheduled_matches = get_msi_schedule(schedule_name)
         if not scheduled_matches:
             continue
+        print("Точка 4: Расписание получено.", flush=True)
 
-        # Запрашиваем ВСЕ актуальные кэфы для лиги один раз за цикл
+        print(f"Точка 5: Запрашиваем кэфы для {odds_name}...", flush=True)
         all_live_odds_data = get_msi_odds(odds_name)
+        print("Точка 6: Кэфы получены.", flush=True)
 
         for match in scheduled_matches:
             match_id, schedule_t1, schedule_t2 = match['id'], match['team1'].strip(), match['team2'].strip()
@@ -621,8 +625,8 @@ def run_monitoring():
         try:
             is_tracking_active_game = main_loop()
         except Exception as e:
-            print(f"MONITOR CRITICAL (Global): Произошла критическая ошибка в главном цикле: {e}")
-            traceback.print_exc()
+            print(f"MONITOR CRITICAL (Global): Произошла критическая ошибка в главном цикле: {e}", flush=True)
+            traceback.print_exc() # traceback обычно выводится в stderr и не буферизуется, но оставим так
             is_tracking_active_game = False
 
         if is_tracking_active_game:
