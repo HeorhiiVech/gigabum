@@ -1,7 +1,8 @@
 # auto_monitor.py (Финальная, полная и отлаженная версия)
 from dotenv import load_dotenv
 load_dotenv() # Загружает переменные из .env файла в окружение
-
+from flask import Flask
+from threading import Thread
 import requests
 from requests.auth import HTTPBasicAuth
 import time
@@ -567,14 +568,16 @@ def main_loop():
 
     print(f"\n{'='*25} ЦИКЛ МОНИТОРИНГА ЗАВЕРШЕН {'='*25}")
     return found_active_game_to_track_overall
-if __name__ == "__main__":
+
+
+def run_monitoring():
     # Блок очистки кэша полностью удален, так как кэш должен быть постоянным.
 
     # Далее идет ваш основной код, который будет работать в цикле
     SLOW_POLL_INTERVAL = 300  # 5 минут - медленный режим
     FAST_POLL_INTERVAL = 10   # 10 секунд - быстрый режим
     is_tracking_active_game = False
-    
+
     while True:
         try:
             is_tracking_active_game = main_loop()
@@ -589,6 +592,26 @@ if __name__ == "__main__":
         else:
             current_interval = SLOW_POLL_INTERVAL
             print(f"\nMONITOR: Активных матчей нет. Переход в медленный режим.")
-            
+
         print(f"MONITOR: Пауза на {current_interval} секунд до следующего цикла.")
         time.sleep(current_interval)
+
+
+if __name__ == "__main__":
+    # Создаем мини-веб-сервер
+    app = Flask(__name__)
+
+    @app.route('/')
+    def health_check():
+        # Эта функция будет отвечать на запросы от Render и UptimeRobot
+        return "Monitoring service is running.", 200
+
+    # Запускаем основной цикл мониторинга в отдельном фоновом потоке
+    monitor_thread = Thread(target=run_monitoring)
+    monitor_thread.daemon = True # Позволяет основному процессу завершаться
+    monitor_thread.start()
+
+    # Запускаем веб-сервер, который будет держать сервис "живым" для Render
+    # Render автоматически предоставит переменную PORT
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
